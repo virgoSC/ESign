@@ -4,7 +4,10 @@
     "type": "1",
     "require": {
         "php": ">=7.2",
-        "guzzlehttp/guzzle": "6.*|7.*"
+        "guzzlehttp/guzzle": "6.*|7.*",
+        "ext-fileinfo": "*",
+        "ext-json": "*",
+        "ext-curl": "*"
     },
     "license": "Apache-2.0",
     "authors": [

@@ -37,7 +37,7 @@ class Config
     /**
      * @return mixed
      */
-    public function getSecret()
+    public function getSecret() :string
     {
         return $this->secret;
     }
