@@ -2,6 +2,8 @@
 
 namespace ESign\District;
 
+use ESign\Response\Response;
+
 class District
 {
     public static $GET = 'GET';
@@ -13,13 +15,65 @@ class District
     public static $FORM = 'FORM';
 
 
-    protected $method = 'get';
+    private $method = 'get';
 
-    protected $parameter = [];
+    private $parameter = [];
 
-    protected $url = '';
+    private $header = [];
 
-    protected $host = '';
+    private $url = '';
+
+    private $host = '';
+
+    private $useHost = true;
+
+    private $response;
+
+
+    /**
+     * @param $url
+     * @param bool $useHost
+     * @return District
+     */
+
+    public function setUrl($url, bool $useHost = true): self
+    {
+        $this->url = $url;
+        $this->useHost = $useHost;
+        return $this;
+    }
+
+
+    public function setHeader(array $header): self
+    {
+        $this->header = $header;
+        return $this;
+    }
+
+    /**
+     * @param string $method
+     */
+    public function setMethod(string $method): void
+    {
+        $this->method = $method;
+    }
+
+    /**
+     * @param array $parameter
+     */
+    public function setParameter(array $parameter): void
+    {
+        $this->parameter = $parameter;
+    }
+
+    /**
+     * @param string $host
+     */
+    public function setHost(string $host): void
+    {
+        $this->host = $host;
+    }
+
 
     /**
      * @return string
@@ -27,6 +81,12 @@ class District
     public function getMethod(): string
     {
         return $this->method;
+    }
+
+
+    public function getHeader(): array
+    {
+        return $this->header;
     }
 
     /**
@@ -37,12 +97,13 @@ class District
         return $this->parameter;
     }
 
-    /**
-     * @return string
-     */
     public function getUrl(): string
     {
-        return $this->host . $this->url;
+        if ($this->useHost) {
+            return $this->host . $this->url;
+        } else {
+            return $this->getRoute();
+        }
     }
 
     public function getRoute(): string
@@ -56,5 +117,14 @@ class District
         return $this;
     }
 
+    public function setResponse($className): self
+    {
+        $this->response = $className;
+        return $this;
+    }
 
+    public function getResponse()
+    {
+        return $this->response;
+    }
 }

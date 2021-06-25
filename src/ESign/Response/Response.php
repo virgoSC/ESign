@@ -1,28 +1,29 @@
 <?php
 
-namespace ESign\Http;
+namespace ESign\Response;
 
-class Response
+abstract class Response
 {
-    private $code = '200';
+    protected $code = '200';
 
-    private $body;
+    protected $body;
 
     /**
      * @var array $header
      */
-    private $header = [];
+    protected $header = [];
 
-    private $error;
+    protected $error;
 
-    public function resolve(): Response
+    public function resolve(): self
     {
         if ($this->code !== '200') {
             $this->setError($this->body);
         } else {
             if (json_decode($this->body)) {
                 $this->body = json_decode($this->body, true);
-                if ($this->body['code'] ?? false) {
+                if (($code = $this->body['code'] ?? '') OR $code === 0) {
+
                     if ($this->body['message'] ?? false == '成功') {
                         $this->body = $this->body['data'];
                     } else {
@@ -53,7 +54,7 @@ class Response
     }
 
     /**
-     * @return string
+     * @return
      */
     public function getBody()
     {
@@ -61,10 +62,10 @@ class Response
     }
 
     /**
-     * @param string $body
+     * @param  $body
      * @return Response
      */
-    public function setBody(string $body): self
+    public function setBody( $body): self
     {
         $this->body = $body;
         return $this;

@@ -4,15 +4,28 @@ namespace ESign;
 
 use ESign\District\Common;
 use ESign\District\District;
+use ESign\District\StructComponent;
 use ESign\District\Template;
 use ESign\Http\Request;
-use ESign\Http\Response;
+use ESign\Response\File\Components;
+use ESign\Response\File\CreateByUploadUrl;
+use ESign\Response\File\DocTemplates;
+use ESign\Response\File\FileUpload;
+use ESign\Response\Response;
 use Exception;
 
 /**
  * Class ESign
  * @method uploadUrl(string $dist)
- * @method Response createByFile(string $fileDir)
+ * @method CreateByUploadUrl createByFile(string $fileDir)
+ * @method FileUpload fileUpload(string $fileDir, string $url)
+ * @method DocTemplates docTemplates(string $templateId)
+ * @method Components templates(string $templateId, StructComponent $structComponent)
+ *
+ *
+ *
+ *
+ * @method FileUpload fileStatus(string $fileId)
  * @package ESign
  */
 class ESign

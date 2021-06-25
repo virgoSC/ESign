@@ -5,6 +5,7 @@ namespace ESign\Http;
 use ESign\Config;
 use ESign\District\Common;
 use ESign\District\District;
+use ESign\Response\Response;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
@@ -28,7 +29,9 @@ class Request
         $this->config = $config;
         $this->district = $district;
 
-        $this->header();
+        $this->buildHeader();
+
+        $res = $this->district->getResponse();
 
         try {
             $client = new Client([
@@ -40,24 +43,34 @@ class Request
             $param = $district->getParameter();
 
             switch ($district->getMethod()) {
+                case 'PUT':
+                    $response = $client->put($url, [
+                        'headers' => $this->header,
+                        'body' => $this->district->getParameter()[0]
+                    ]);
+                    break;
                 case 'POST':
                     $response = $client->post($url, [
                         'headers' => $this->header,
-                        'body' => json_encode($param,JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+                        'body' => json_encode($param, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
                     ]);
                     break;
                 default://get
-                    $url .= http_build_query($param);
-                    $response = $client->get($url);
+                    if ($param) {
+                        $url .= http_build_query($param);
+                    }
+                    $response = $client->get($url,[
+                        'headers' => $this->header
+                    ]);
                     break;
             }
 
-            return (new Response())
+            return (new $res())
                 ->setCode($response->getStatusCode())
                 ->setBody($response->getBody()->getContents())
                 ->setHeader($response->getHeaders())->resolve();
         } catch (GuzzleException $e) {
-            return (new Response())
+            return (new $res())
                 ->setCode('500')
                 ->setError($e->getMessage());
         }
@@ -67,8 +80,12 @@ class Request
     /**
      * 生成header
      */
-    public function header()
+    public function buildHeader()
     {
+        if ($this->district->getHeader()) {
+            $this->header = $this->district->getHeader();
+            return;
+        }
         $this->header = [
             'X-Tsign-Open-App-Id' => $this->config->getAppId(),
             'Content-Type' => 'application/json; charset=UTF-8',
@@ -78,7 +95,6 @@ class Request
         ];
 
         if ($this->district->getMethod() !== District::$FORM) {
-
             $this->header['Content-MD5'] = Common::base64Md5($this->district->getParameter());
         }
 
@@ -95,6 +111,7 @@ class Request
         ];
         //Content-MD5
         $signArray[] = $contentMd5;
+
         //Content-Type
         $signArray[] = 'application/json; charset=UTF-8';
         //Date
@@ -104,7 +121,7 @@ class Request
 
         $stringToSign = implode("\n", $signArray);
 
-//        var_dump($stringToSign);
+//        var_dump($stringToSign);exit;
 
 //        $stringToSign = $this->district->getMethod() . "\n" . '*/*' . "\n" . $contentMd5 . "\n" . 'application/json; charset=UTF-8' . "\n" . '' . "\n";
 //        $stringToSign .= $this->district->getUrl();
