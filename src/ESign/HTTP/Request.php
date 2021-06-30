@@ -42,6 +42,7 @@ class Request
             $url = $district->getUrl();
             $param = $district->getParameter();
 
+
             switch ($district->getMethod()) {
                 case 'PUT':
                     $response = $client->put($url, [
@@ -52,19 +53,18 @@ class Request
                 case 'POST':
                     $response = $client->post($url, [
                         'headers' => $this->header,
-                        'body' => json_encode($param, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+                        'body' => json_encode($param, JSON_UNESCAPED_SLASHES),
                     ]);
                     break;
                 default://get
                     if ($param) {
-                        $url .= http_build_query($param);
+                        $url .= '?'.http_build_query($param);
                     }
                     $response = $client->get($url,[
                         'headers' => $this->header
                     ]);
                     break;
             }
-
             return (new $res())
                 ->setCode($response->getStatusCode())
                 ->setBody($response->getBody()->getContents())

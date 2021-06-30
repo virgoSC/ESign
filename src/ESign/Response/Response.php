@@ -23,8 +23,7 @@ abstract class Response
             if (json_decode($this->body)) {
                 $this->body = json_decode($this->body, true);
                 if (($code = $this->body['code'] ?? '') OR $code === 0) {
-
-                    if ($this->body['message'] ?? false == '成功') {
+                    if (($this->body['message'] ?? false) == '成功') {
                         $this->body = $this->body['data'];
                     } else {
                         $this->setError($this->body['message']);

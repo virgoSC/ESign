@@ -2,9 +2,12 @@
 
 namespace ESign\District;
 
+use ESign\Response\File\Components;
 use ESign\Response\File\CreateByUploadUrl;
 use ESign\Response\File\DocTemplates;
+use ESign\Response\File\FileStatus;
 use ESign\Response\File\FileUpload;
+use ESign\Response\File\TemplateToFiles;
 use ESign\UrlSet;
 use Exception;
 
@@ -76,7 +79,7 @@ class Template extends District
      * @return $this
      * @throws Exception
      */
-    public function templatesComponents(string $templateId, StructComponent $component): self
+    public function templates(string $templateId, StructComponent $component): self
     {
         $url = UrlSet::$set['templatesComponents'];
 
@@ -86,7 +89,7 @@ class Template extends District
 
         $this->setMethod(self::$POST);
 
-        $this->setResponse(CreateByUploadUrl::class);
+        $this->setResponse(Components::class);
 
         $this->setParameter([
             'templateId' => $templateId,
@@ -95,6 +98,32 @@ class Template extends District
         return $this;
     }
 
+    /**
+     *通过模板创建文件
+     */
+    public function templateToFiles(string $templateId, string $name, array $formField): self
+    {
+        $url = UrlSet::$set['templateToFiles'];
+
+        $this->setUrl($url);
+
+        $this->setMethod(self::$POST);
+
+        $this->setResponse(TemplateToFiles::class);
+
+        $this->setParameter([
+            'name' => $name,
+            'templateId' => $templateId,
+            'simpleFormFields' => $formField
+        ]);
+        return $this;
+    }
+
+    /**
+     * 查询文件详情/下载文件
+     * @param string $fileId
+     * @return $this
+     */
     public function fileStatus(string $fileId): self
     {
         $url = UrlSet::$set['fileStatus'];
@@ -104,12 +133,13 @@ class Template extends District
 
         $this->setMethod(self::$GET);
 
-        $this->setResponse(CreateByUploadUrl::class);
+        $this->setResponse(FileStatus::class);
 
         return $this;
     }
 
     /**
+     * 文件上传
      * @throws Exception
      */
     public function fileUpload(string $fileDir, string $url)

@@ -30,7 +30,14 @@ class StructComponent
     private $x;
     private $y;
 
+    private $component = [];
+
     public function generate(): array
+    {
+        return $this->component;
+    }
+
+    public function append(): self
     {
         $component = [
             'type' => $this->getType(),
@@ -39,7 +46,6 @@ class StructComponent
                 'style' => [
                     'width' => $this->getWidth(),
                     'height' => $this->getHeight(),
-                    ''
                 ],
                 'pos' => [
                     'page' => $this->getPage(),
@@ -67,11 +73,27 @@ class StructComponent
         }
 
         if ($this->getTextColor()) {
-            $component['context']['style']['fontSize'] = $this->getTextColor();
+            $component['context']['style']['textColor'] = $this->getTextColor();
         }
 
-        return $component;
+        $this->component[] = $component;
+        $this->reset();
+        return $this;
     }
+
+    private function reset()
+    {
+        $vars = get_class_vars(get_class($this));
+
+        foreach ($vars as $key=>$var) {
+            if (is_array($var) or $var) {
+                continue;
+            } else {
+                $this->$key = '';
+            }
+        }
+    }
+
 
     /**
      * @return mixed
@@ -84,9 +106,10 @@ class StructComponent
     /**
      * @param mixed $structId
      */
-    public function setStructId($structId): void
+    public function setStructId($structId): self
     {
         $this->structId = $structId;
+        return $this;
     }
 
     /**
@@ -100,9 +123,11 @@ class StructComponent
     /**
      * @param mixed $type
      */
-    public function setType($type): void
+    public function setType($type): self
     {
         $this->type = $type;
+        return $this;
+
     }
 
     /**
@@ -116,9 +141,11 @@ class StructComponent
     /**
      * @param mixed $label
      */
-    public function setLabel($label): void
+    public function setLabel($label): self
+
     {
         $this->label = $label;
+        return $this;
     }
 
     /**
@@ -132,9 +159,11 @@ class StructComponent
     /**
      * @param bool $required
      */
-    public function setRequired(bool $required): void
+    public function setRequired(bool $required): self
     {
         $this->required = $required;
+        return $this;
+
     }
 
     /**
@@ -148,9 +177,11 @@ class StructComponent
     /**
      * @param mixed $limit
      */
-    public function setLimit($limit): void
+    public function setLimit($limit): self
     {
         $this->limit = $limit;
+        return $this;
+
     }
 
     /**
@@ -164,9 +195,11 @@ class StructComponent
     /**
      * @param mixed $width
      */
-    public function setWidth($width): void
+    public function setWidth($width): self
     {
         $this->width = $width;
+        return $this;
+
     }
 
     /**
@@ -180,9 +213,11 @@ class StructComponent
     /**
      * @param mixed $height
      */
-    public function setHeight($height): void
+    public function setHeight($height): self
     {
         $this->height = $height;
+        return $this;
+
     }
 
     /**
@@ -195,26 +230,32 @@ class StructComponent
 
     /**
      * @param int $font
+     * @return StructComponent
      */
-    public function setFont(int $font): void
+    public function setFont(int $font): self
     {
         $this->font = $font;
+        return $this;
+
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getFontSize(): int
+    public function getFontSize(): float
     {
         return $this->fontSize;
     }
 
     /**
-     * @param int $fontSize
+     * @param float $fontSize
+     * @return StructComponent
      */
-    public function setFontSize(int $fontSize): void
+    public function setFontSize(float $fontSize): self
     {
         $this->fontSize = $fontSize;
+        return $this;
+
     }
 
     /**
@@ -228,9 +269,11 @@ class StructComponent
     /**
      * @param string $textColor
      */
-    public function setTextColor(string $textColor): void
+    public function setTextColor(string $textColor): self
     {
         $this->textColor = $textColor;
+        return $this;
+
     }
 
     /**
@@ -244,9 +287,11 @@ class StructComponent
     /**
      * @param mixed $page
      */
-    public function setPage($page): void
+    public function setPage($page): self
     {
         $this->page = $page;
+        return $this;
+
     }
 
     /**
@@ -260,9 +305,11 @@ class StructComponent
     /**
      * @param mixed $x
      */
-    public function setX($x): void
+    public function setX($x): self
     {
         $this->x = $x;
+        return $this;
+
     }
 
     /**
@@ -276,8 +323,10 @@ class StructComponent
     /**
      * @param mixed $y
      */
-    public function setY($y): void
+    public function setY($y): self
     {
         $this->y = $y;
+        return $this;
+
     }
 }

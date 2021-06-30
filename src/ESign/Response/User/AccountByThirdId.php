@@ -1,11 +1,12 @@
 <?php
 
-namespace ESign\Response\File;
+namespace ESign\Response\User;
 
 use ESign\Response\Response;
 
-class Components extends Response
+class AccountByThirdId extends Response
 {
+
     public function resolve(): Response
     {
         parent::resolve();
