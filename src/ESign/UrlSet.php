@@ -31,9 +31,11 @@ class UrlSet
         //流程签署人
         'executeUrl' => '/v1/signflows/{flowId}/executeUrl', //获取签署地址
 
-
         //企业认证
         'orgAuthThree' => '/v2/identity/auth/api/organization/threeFactors',//发起企业核身认证3要素检验
-        'orgLegalRepSignAuth' => '/v2/identity/auth/api/organization/{flowId}/legalRepSignAuth'
+        'orgLegalRepSignAuth' => '/v2/identity/auth/api/organization/{flowId}/legalRepSignAuth',
+
+        //流程文档下载
+        'documents' => '/v1/signflows/{flowId}/documents',
     ];
 }

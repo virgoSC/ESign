@@ -22,6 +22,7 @@ use ESign\Response\File\TemplateToFiles;
 use ESign\Response\Organizations\OrganizationsByOrgId;
 use ESign\Response\Organizations\Seals;
 use ESign\Response\Response;
+use ESign\Response\SignFlows\Documents;
 use ESign\Response\SignFlows\ExecuteUrl;
 use ESign\Response\SignFlows\FlowOneStep as FlowOneStopResponse;
 use ESign\Response\User\CreateByThirdPartyUserId;
@@ -50,6 +51,7 @@ use Exception;
  * @method DefaultResponse signAuthOrg(string $accountId, string $deadline = '2099-01-01 00:00:00')
  * 一步签署api
  * @method FlowOneStopResponse createFlowOneStep(OneStepConfig $oneStepConfig)
+ * @method Documents documents(string $flowId)
  *
  * @method ExecuteUrl executeUrl(string $flowId, string $accountId, string $organizeId = null, int $urlType = 0, string $appScheme = '')
  *
@@ -58,6 +60,8 @@ use Exception;
  * 企业认证
  * @method FlowOneStopResponse orgAuthThree(string $name, string $orgCode, string $legalRepName, string $contextId = null, string $notifyUrl = null)
  * @method DefaultResponse orgLegalRepSignAuth(string $flowId, string $mobileNo, string $legalRepIdNo = null, string $redirectUrl = null)
+ *
+ *
  * @package ESign
  */
 class ESign
